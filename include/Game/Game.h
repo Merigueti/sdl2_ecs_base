@@ -1,9 +1,9 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <string>
 #include <memory>
 
-class ECSManager; // Forward declaration
+class ECSManager;
 
 class Game {
 public:
@@ -25,8 +25,6 @@ private:
     std::unique_ptr<ECSManager> ecsManager;
 
     bool isRunning;
-    
-    // FPS control
     int frameCount;
     float fpsTimer;
     std::string baseTitle;

@@ -9,7 +9,7 @@ Game::Game() : window(nullptr, SDL_DestroyWindow),
                isRunning(false), frameCount(0), fpsTimer(0.0f),
                targetFPS(60), targetFrameTime(1.0f / 60)
 {
-    //pass
+    // pass
 }
 
 Game::~Game()
@@ -19,19 +19,16 @@ Game::~Game()
 
 void Game::init(const std::string &title, int width, int height)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        std::cerr << "Erro ao inicializar SDL: " << SDL_GetError() << std::endl;
+
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                    "Falha ao inicializar SDL_VIDEO: %s",
+                    SDL_GetError());
         return;
     }
 
-    window.reset(SDL_CreateWindow(
-        title.c_str(),
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        width,
-        height,
-        SDL_WINDOW_SHOWN));
+
+    window.reset(SDL_CreateWindow(title.c_str(), width, height, 0));
 
     if (!window.get())
     {
@@ -39,7 +36,7 @@ void Game::init(const std::string &title, int width, int height)
         return;
     }
 
-    renderer.reset(SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED));
+    renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
     if (!renderer.get())
     {
         std::cerr << "Erro ao criar renderer: " << SDL_GetError() << std::endl;
@@ -77,7 +74,7 @@ void Game::processInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        if (event.type == SDL_QUIT)
+        if (event.type == SDL_EVENT_QUIT)
         {
             isRunning = false;
         }
@@ -116,9 +113,13 @@ void Game::updateFPS(float deltaTime)
 
 void Game::capFrameRate(Uint64 frameStart) const
 {
-    float frameTime = (float)((SDL_GetPerformanceCounter() - frameStart) / (double)SDL_GetPerformanceFrequency());
-    if (frameTime < targetFrameTime)
-    {
-        SDL_Delay((Uint32)((targetFrameTime - frameTime) * 1000.0f));
+    Uint64 frameEnd = SDL_GetPerformanceCounter();
+    Uint64 elapsedTicks = frameEnd - frameStart;
+    Uint64 freq = SDL_GetPerformanceFrequency();
+    Uint64 elapsedNs = (elapsedTicks * 1000000000ull) / freq;
+    Uint64 nsPerFrame = static_cast<Uint64>(targetFrameTime * 1e9f);
+
+    if (elapsedNs < nsPerFrame) {
+        SDL_DelayNS(nsPerFrame - elapsedNs);
     }
 }
