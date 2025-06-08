@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <string>
+#include <memory>
 
 class ECSManager; // Forward declaration
 
@@ -19,10 +20,11 @@ private:
     void updateFPS(float deltaTime);
     void capFrameRate(Uint64 frameStart) const;
     
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window;
+    std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> renderer;
+    std::unique_ptr<ECSManager> ecsManager;
+
     bool isRunning;
-    ECSManager* ecsManager;
     
     // FPS control
     int frameCount;
