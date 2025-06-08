@@ -2,7 +2,7 @@ TARGET = app
 
 CXX = g++
 
-CXXFLAGS = -std=c++11 -Wall -Wextra -Iinclude `sdl2-config --cflags`
+CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude `sdl2-config --cflags`
 LDFLAGS = `sdl2-config --libs` -lSDL2_gfx
 
 SRC_DIR = src
