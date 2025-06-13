@@ -1,4 +1,5 @@
 #include "ECS/Entity.h"
+#include "Components/TransformComponent.h"
 
 Entity::Entity(int id) : id(id) {}
 
@@ -29,3 +30,6 @@ std::shared_ptr<T> Entity::getComponent() {
 int Entity::getId() const {
     return id;
 }
+
+template void Entity::addComponent<TransformComponent>(std::shared_ptr<TransformComponent>);
+template std::shared_ptr<TransformComponent> Entity::getComponent<TransformComponent>();

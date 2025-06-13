@@ -1,5 +1,7 @@
 #include "Game/Game.h"
 #include "ECS/ECSManager.h"
+#include "Systems/RenderSystem.h"
+#include "Components/TransformComponent.h"
 #include <iostream>
 #include <cstdio>
 
@@ -45,6 +47,14 @@ void Game::init(const std::string &title, int width, int height)
     }
 
     ecsManager = std::make_unique<ECSManager>();
+    ecsManager->addSystem<RenderSystem>(renderer.get());
+
+    auto entity = ecsManager->createEntity();
+    auto transform = std::make_shared<TransformComponent>(10, 20, 30, 30);
+    entity->addComponent<TransformComponent>(transform);
+    auto renderSystem = ecsManager->getSystem<RenderSystem>();
+    renderSystem->addEntity(entity);
+
     baseTitle = title;
     isRunning = true;
 }
@@ -91,7 +101,8 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.get());
 
-    // ecsManager->render(renderer);
+    auto renderSystem = ecsManager->getSystem<RenderSystem>();
+    renderSystem->render();
 
     SDL_RenderPresent(renderer.get());
 }

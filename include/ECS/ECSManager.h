@@ -9,8 +9,8 @@ public:
     std::shared_ptr<Entity> createEntity();
     void destroyEntity(int entityId);
     
-    template <typename T>
-    void addSystem();
+    template <typename T, typename... Args>
+    void addSystem(Args&&... args);
     
     template <typename T>
     std::shared_ptr<T> getSystem();

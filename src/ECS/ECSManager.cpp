@@ -1,4 +1,5 @@
 #include "ECS/ECSManager.h"
+#include "Systems/RenderSystem.h"
 #include <cassert>
 
 std::shared_ptr<Entity> ECSManager::createEntity() {
@@ -14,12 +15,12 @@ void ECSManager::destroyEntity(int entityId) {
     }
 }
 
-template <typename T>
-void ECSManager::addSystem() {
+template <typename T, typename... Args>
+void ECSManager::addSystem(Args&&... args) {
     static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
     size_t typeHash = typeid(T).hash_code();
     assert(systems.find(typeHash) == systems.end() && "System already added");
-    systems[typeHash] = std::make_shared<T>();
+    systems[typeHash] = std::make_shared<T>(std::forward<Args>(args)...);
 }
 
 template <typename T>
@@ -37,3 +38,6 @@ void ECSManager::update(float deltaTime) {
         system->update(deltaTime);
     }
 }
+
+template void ECSManager::addSystem<RenderSystem, SDL_Renderer*>(SDL_Renderer*&&);
+template std::shared_ptr<RenderSystem> ECSManager::getSystem<RenderSystem>();
