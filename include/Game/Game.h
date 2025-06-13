@@ -2,6 +2,8 @@
 #include <SDL3/SDL.h>
 #include <string>
 #include <memory>
+#include "Game/Scene.h"
+
 
 class ECSManager;
 
@@ -23,6 +25,7 @@ private:
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window;
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> renderer;
     std::unique_ptr<ECSManager> ecsManager;
+    std::unique_ptr<Scene> currentScene;
 
     bool isRunning;
     int frameCount;

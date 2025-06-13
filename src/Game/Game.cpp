@@ -1,7 +1,8 @@
 #include "Game/Game.h"
+#include "Game/Scene.h"
+#include "Game/MainScene.h"
 #include "ECS/ECSManager.h"
 #include "Systems/RenderSystem.h"
-#include "Components/TransformComponent.h"
 #include <iostream>
 #include <cstdio>
 
@@ -50,10 +51,10 @@ void Game::init(const std::string &title, int width, int height)
     ecsManager->addSystem<RenderSystem>(renderer.get());
 
     auto entity = ecsManager->createEntity();
-    auto transform = std::make_shared<TransformComponent>(10, 20, 30, 30);
-    entity->addComponent<TransformComponent>(transform);
     auto renderSystem = ecsManager->getSystem<RenderSystem>();
-    renderSystem->addEntity(entity);
+
+    currentScene = std::make_unique<MainScene>();
+    currentScene->load(*ecsManager);
 
     baseTitle = title;
     isRunning = true;
@@ -93,6 +94,9 @@ void Game::processInput()
 
 void Game::update(float deltaTime)
 {
+    if (currentScene) {
+        currentScene->update(deltaTime);
+    }
     ecsManager->update(deltaTime);
 }
 

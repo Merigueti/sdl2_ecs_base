@@ -14,11 +14,12 @@ SOURCES = $(wildcard $(SRC_DIR)/*.cpp) \
           $(wildcard $(SRC_DIR)/ECS/*.cpp) \
           $(wildcard $(SRC_DIR)/Components/*.cpp) \
           $(wildcard $(SRC_DIR)/Systems/*.cpp) \
-          $(wildcard $(SRC_DIR)/Game/*.cpp)
+          $(wildcard $(SRC_DIR)/Game/*.cpp) \
+          $(wildcard $(SRC_DIR)/Entities/*.cpp) \
 
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
 
-$(shell mkdir -p $(BUILD_DIR)/ECS $(BUILD_DIR)/Components $(BUILD_DIR)/Systems $(BUILD_DIR)/Game)
+$(shell mkdir -p $(BUILD_DIR)/ECS $(BUILD_DIR)/Components $(BUILD_DIR)/Systems $(BUILD_DIR)/Game $(BUILD_DIR)/Entities)
 
 all: $(BUILD_DIR)/$(TARGET)
 
