@@ -3,6 +3,7 @@
 #include "Game/MainScene.h"
 #include "ECS/ECSManager.h"
 #include "Systems/RenderSystem.h"
+#include "Systems/MovementSystem.h"
 #include <iostream>
 #include <cstdio>
 
@@ -49,9 +50,7 @@ void Game::init(const std::string &title, int width, int height)
 
     ecsManager = std::make_unique<ECSManager>();
     ecsManager->addSystem<RenderSystem>(renderer.get());
-
-    auto entity = ecsManager->createEntity();
-    auto renderSystem = ecsManager->getSystem<RenderSystem>();
+    ecsManager->addSystem<MovementSystem>();
 
     currentScene = std::make_unique<MainScene>();
     currentScene->load(*ecsManager);

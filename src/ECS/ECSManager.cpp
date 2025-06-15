@@ -1,5 +1,6 @@
 #include "ECS/ECSManager.h"
 #include "Systems/RenderSystem.h"
+#include "Systems/MovementSystem.h"
 #include <cassert>
 
 std::shared_ptr<Entity> ECSManager::createEntity() {
@@ -41,3 +42,6 @@ void ECSManager::update(float deltaTime) {
 
 template void ECSManager::addSystem<RenderSystem, SDL_Renderer*>(SDL_Renderer*&&);
 template std::shared_ptr<RenderSystem> ECSManager::getSystem<RenderSystem>();
+
+template void ECSManager::addSystem<MovementSystem>();
+template std::shared_ptr<MovementSystem> ECSManager::getSystem<MovementSystem>();
