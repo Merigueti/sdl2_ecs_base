@@ -3,6 +3,9 @@
 #include "Game/MainScene.h"
 #include "ECS/ECSManager.h"
 #include "Systems/RenderSystem.h"
+#include "Systems/MovementSystem.h"
+#include "Systems/ControlSystem.h"
+#include "Systems/SimpleRpgMovementInput.h"
 #include <iostream>
 #include <cstdio>
 
@@ -49,9 +52,9 @@ void Game::init(const std::string &title, int width, int height)
 
     ecsManager = std::make_unique<ECSManager>();
     ecsManager->addSystem<RenderSystem>(renderer.get());
-
-    auto entity = ecsManager->createEntity();
-    auto renderSystem = ecsManager->getSystem<RenderSystem>();
+    ecsManager->addSystem<MovementSystem>();
+    ecsManager->addSystem<ControlSystem>();
+    ecsManager->addSystem<SimpleRpgMovementInput>();
 
     currentScene = std::make_unique<MainScene>();
     currentScene->load(*ecsManager);
@@ -89,8 +92,15 @@ void Game::processInput()
         {
             isRunning = false;
         }
+
+        auto controlSystem = ecsManager->getSystem<ControlSystem>();
+        if (controlSystem)
+        {
+            controlSystem->handleEvent(event);
+        }
     }
 }
+
 
 void Game::update(float deltaTime)
 {

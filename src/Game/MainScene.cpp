@@ -4,7 +4,9 @@
 #include "Systems/RenderSystem.h"
 
 void MainScene::load(ECSManager& ecs) {
-    auto player = createPlayer(ecs);
+    for (int i = 0; i < 5; i ++){
+        createPlayer(ecs);
+    }
 }
 
 void MainScene::update(float deltaTime) {

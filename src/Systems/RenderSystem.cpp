@@ -6,7 +6,7 @@
 RenderSystem::RenderSystem(SDL_Renderer *renderer)
     : renderer(renderer) {}
 
-void RenderSystem::update(float deltaTime)
+void RenderSystem::update(float /*deltaTime*/)
 {
     // render();
 }
@@ -22,11 +22,7 @@ void RenderSystem::render()
         if (!transform)
             continue;
 
-        SDL_FRect dstRect = {
-            transform->rect.x,
-            transform->rect.y,
-            transform->rect.w,
-            transform->rect.h};
+        SDL_FRect dstRect = transform->GetRect();
 
         SDL_RenderFillRect(renderer, &dstRect);
     }
