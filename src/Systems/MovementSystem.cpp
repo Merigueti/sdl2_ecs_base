@@ -11,7 +11,7 @@ void MovementSystem::update(float deltaTime)
         auto transform = entity->getComponent<TransformComponent>();
         auto velocity = entity->getComponent<VelocityComponent>();
         if (transform && velocity) {
-            transform->position.x += velocity->velocity.y * deltaTime;
+            transform->position.x += velocity->velocity.x * deltaTime;
             transform->position.y += velocity->velocity.y * deltaTime;
         }
     }
